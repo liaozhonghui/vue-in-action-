@@ -1,11 +1,9 @@
 <template>
   <div>
-    <HelloWorld msg="test home"></HelloWorld>
+    detail <span>{{ $route.params.id }}</span>
   </div>
 </template>
 
-<script setup>
-import HelloWorld from "comps/HelloWorld.vue";
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>

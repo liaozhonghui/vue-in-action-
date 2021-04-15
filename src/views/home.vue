@@ -1,6 +1,9 @@
 <template>
   <div>
-    <HelloWorld msg="test home"></HelloWorld>
+    <HelloWorld msg="hello vue3 + vite"></HelloWorld>
+    <router-link to="/home/1">detail1</router-link>
+    <router-link to="/home/2">detail2</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -8,4 +11,4 @@
 import HelloWorld from "comps/HelloWorld.vue";
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

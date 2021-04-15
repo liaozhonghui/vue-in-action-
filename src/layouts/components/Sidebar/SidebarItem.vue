@@ -1,12 +1,18 @@
 <template>
   <div v-if="!item.hidden">
-    <template v-if="isAppLink">
+    <template
+      v-if="
+        hasOneShowingChild(item.children, item) &&
+        (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
+        !item.alwaysShow
+      "
+    >
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)">
           <item
             :icon="onlyOneChild.meta.icon || (item.meta && item.meta.icon)"
             :title="onlyOneChild.meta.title"
-          ></item>
+          />
         </el-menu-item>
       </app-link>
     </template>
@@ -17,14 +23,13 @@
       :index="resolvePath(item.path)"
       popper-append-to-body
     >
-      <template>
+      <template #title>
         <item
           v-if="item.meta"
           :icon="item.meta && item.meta.icon"
           :title="item.meta.title"
         />
       </template>
-
       <sidebar-item
         v-for="child in item.children"
         :key="child.path"
@@ -32,7 +37,7 @@
         :item="child"
         :base-path="resolvePath(child.path)"
         class="nest-menu"
-      ></sidebar-item>
+      />
     </el-submenu>
   </div>
 </template>
@@ -42,10 +47,10 @@ import path from "path-browserify";
 import Item from "./Item.vue";
 import AppLink from "./Link.vue";
 import { isExternal } from "utils/validate";
-import { computed, defineProps, ref, watch } from "vue";
-import * as R from "ramda";
+import { defineProps, ref } from "vue";
 
 const props = defineProps({
+  // route object
   item: {
     type: Object,
     required: true,
@@ -59,40 +64,35 @@ const props = defineProps({
     default: "",
   },
 });
-const item = props.item;
 const onlyOneChild = ref(null);
 const hasOneShowingChild = (children = [], parent) => {
-  const showingChildren = R.filter((item) => {
-    if (item.hidden) return false;
-    onlyOneChild.value = item;
+  const showingChildren = children.filter((item) => {
+    if (item.hidden) {
+      return false;
+    } else {
+      // Temp set(will be used if only has one showing child)
+      onlyOneChild.value = item;
+      return true;
+    }
+  });
+  // When there is only one child router, the child router is displayed by default
+  if (showingChildren.length === 1) {
     return true;
-  })(children);
-
-  if (R.size(showingChildren) === 1) return true;
-  if (R.size(showingChildren) === 0) {
+  }
+  // Show parent if there are no child router to display
+  if (showingChildren.length === 0) {
     onlyOneChild.value = { ...parent, path: "", noShowingChildren: true };
     return true;
   }
-
   return false;
 };
-
 const resolvePath = (routePath) => {
-  if (isExternal(routePath)) return routePath;
-
-  if (isExternal(props.basePath)) return props.basePath;
-
+  if (isExternal(routePath)) {
+    return routePath;
+  }
+  if (isExternal(props.basePath)) {
+    return props.basePath;
+  }
   return path.resolve(props.basePath, routePath);
 };
-
-// 计算属性
-const isAppLink = computed(() => {
-  return (
-    hasOneShowingChild(item.children, item) &&
-    (!onlyOneChild.children || onlyOneChild.noShowingChildren) &&
-    !item.alwaysShow
-  );
-});
 </script>
-
-<style lang="scss" scoped></style>

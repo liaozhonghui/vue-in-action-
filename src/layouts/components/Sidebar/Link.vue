@@ -1,12 +1,12 @@
 <template>
-  <component :is="type" v-bind="slotProps(to)">
+  <component :is="type" v-bind="linkProps(to)">
     <slot />
   </component>
 </template>
 
 <script setup>
 import { isExternal as isExt } from "utils/validate";
-import { defineProps } from "@vue/runtime-core";
+import { computed, defineProps } from "vue";
 
 const props = defineProps({
   to: {
@@ -14,8 +14,10 @@ const props = defineProps({
     required: true,
   },
 });
+
 const isExternal = computed(() => isExt(props.to));
 
+// type是一个计算属性
 const type = computed(() => {
   if (isExternal.value) {
     return "a";
@@ -31,7 +33,6 @@ const linkProps = (to) => {
       rel: "noopener",
     };
   }
-
   return { to };
 };
 </script>

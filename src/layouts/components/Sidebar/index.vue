@@ -19,20 +19,18 @@
 </template>
 
 <script setup>
-import SiderbarItem from "./SidebarItem.vue";
-import variables from "styles/variables.module.scss";
-import { routes } from "@/router";
+import SidebarItem from "./SidebarItem.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import { routes } from "@/router";
+import variables from "styles/variables.module.scss";
 
 const activeMenu = computed(() => {
   const route = useRoute();
-  console.log("route:", route);
   const { meta, path } = route;
   if (meta.activeMenu) {
     return meta.activeMenu;
   }
-
   return path;
 });
 </script>
