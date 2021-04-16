@@ -49,7 +49,10 @@ const handleLink = (item) => {
   router.push(pathCompile(path));
 };
 
+// 首次调用
 getBreadcrumb();
+
+// 监控route变化
 watch(route, getBreadcrumb);
 </script>
 

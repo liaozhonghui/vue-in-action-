@@ -22,7 +22,7 @@ import Sidebar from "./components/Sidebar/index.vue";
 @import "../styles/mixin.scss";
 
 .app-wrapper {
-  // @include clearfix;
+  @include clearfix;
   position: relative;
   height: 100%;
   width: 100%;
