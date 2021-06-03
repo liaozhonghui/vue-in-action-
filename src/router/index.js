@@ -11,8 +11,8 @@ import Layout from "layouts/index.vue";
  * redirect: noRedirect           如果设置noRedirect时，breadcrumb中点击将不会跳转
  * name:'router-name'             name用于<keep-alive> (必须设置!!!)
  * meta : {
-    roles: ['admin','editor']    页面可访问角色设置 
-    title: 'title'               sidebar和breadcrumb显示的标题 
+    roles: ['admin','editor']    页面可访问角色设置
+    title: 'title'               sidebar和breadcrumb显示的标题
     icon: 'svg-name'/'el-icon-x' sidebar中显示的图标
     breadcrumb: false            设置为false，将不会出现在面包屑中
     activeMenu: '/example/list'  如果设置一个path, sidebar将会在高亮匹配项
@@ -85,6 +85,23 @@ export const routes = [
       },
     ],
   },
+  {
+    path: '/team',
+    component: Layout,
+    meta: {
+      title: "团队",
+      icon: 'el-icon-user-solid'
+    },
+    redirect: '/team/tree',
+    children: [{
+      path: "tree",
+      component: () => import("views/team/tree.vue"),
+      meta: {
+        title: '团队树',
+        icon: 'el-icon-document'
+      }
+    }]
+  }
 ];
 
 const router = createRouter({

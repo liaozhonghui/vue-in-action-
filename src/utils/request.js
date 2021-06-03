@@ -5,9 +5,9 @@ import store from "/@/store";
 // 创建axios实例
 const service = axios.create({
   // 在请求地址前面加上baseURL
-  baseURL: import.meta.env.VITE_BASE_API,
+  baseURL: 'http://192.168.111.228:7016/performance' || import.meta.env.VITE_BASE_API,
   // 当发送跨域请求时携带cookie
-  // withCredentials: true,
+  withCredentials: true,
   timeout: 5000,
 });
 
@@ -19,7 +19,7 @@ service.interceptors.request.use(
     // // 自定义令牌的字段名为X-Token，根据咱们后台再做修改
     // config.headers["X-Token"] = store.getters.token;
     // }
-    config.headers["X-Token"] = "my token";
+    config.headers["sessiontoken"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJaaHVMYW4iLCJlbWFpbCI6InpodWxhbkB0YWxlZnVuLmNvbSIsImlhdCI6MTYyMjY4MzMwNiwiZXhwIjoxNjIyNzY5NzA2fQ.dExRU6N3WymgRcCxY2hx9LTw4f1YVmXgNKsn7js1X8o";
     return config;
   },
   (error) => {
@@ -44,14 +44,14 @@ service.interceptors.response.use(
     const res = response.data;
 
     // 如果状态码不是20000则认为有错误
-    if (res.code !== 20000) {
+    if (res.errno !== 0) {
       Message.error({
         message: res.message || "Error",
         duration: 5 * 1000,
       });
 
       // 50008: 非法令牌; 50012: 其他客户端已登入; 50014: 令牌过期;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      if (res.errno === 50008 || res.errno === 50012 || res.errno === 50014) {
         // 重新登录
         Msgbox.confirm("您已登出, 请重新登录", "确认", {
           confirmButtonText: "重新登录",
