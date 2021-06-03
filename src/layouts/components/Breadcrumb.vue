@@ -33,12 +33,12 @@ const getBreadcrumb = () => {
   levelList.value = matched.filter(
     (item) => item.meta && item.meta.title && item.meta.breadcrumb !== false
   );
-};
+}
 
-const pathCompile = (path) => {
+const pathCompile = (path) => {  
   var toPath = compile(path);
   return toPath(route.params);
-};
+}
 
 const handleLink = (item) => {
   const { redirect, path } = item;
@@ -47,13 +47,11 @@ const handleLink = (item) => {
     return;
   }
   router.push(pathCompile(path));
-};
+}
 
-// 首次调用
 getBreadcrumb();
+watch(route, getBreadcrumb)
 
-// 监控route变化
-watch(route, getBreadcrumb);
 </script>
 
 <style lang="scss" scoped>

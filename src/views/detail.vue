@@ -1,9 +1,13 @@
 <template>
   <div>
-    detail <span>{{ $route.params.id }}</span>
+    detail <span>{{$route.params.id}}</span>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+  
+</script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+
+</style>

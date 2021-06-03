@@ -1,9 +1,8 @@
 <template>
   <section class="app-main">
+    <!-- 内部应该显示子路由页面信息 -->
     <router-view v-slot="{ Component }">
-      <transition name="fade-transform" mode="out-in">
-        <component :is="Component"></component>
-      </transition>
+      <component :is="Component" />
     </router-view>
   </section>
 </template>
@@ -14,10 +13,12 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .app-main {
+  /*50 = navbar  */
   min-height: calc(100vh - 50px);
   width: 100%;
   position: relative;
+  overflow: hidden;
 }
 </style>
